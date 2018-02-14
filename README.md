@@ -1,56 +1,92 @@
 # **Finding Lane Lines on the Road** 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-<img src="examples/laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
-
-Overview
+## Writeup
 ---
 
-When we drive, we use our eyes to decide where to go.  The lines on the road that show us where the lanes are act as our constant reference for where to steer the vehicle.  Naturally, one of the first things we would like to do in developing a self-driving car is to automatically detect lane lines using an algorithm.
+**Finding Lane Lines on the Road**
 
-In this project you will detect lane lines in images using Python and OpenCV.  OpenCV means "Open-Source Computer Vision", which is a package that has many useful tools for analyzing images.  
-
-To complete the project, two files will be submitted: a file containing project code and a file containing a brief write up explaining your solution. We have included template files to be used both for the [code](https://github.com/udacity/CarND-LaneLines-P1/blob/master/P1.ipynb) and the [writeup](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md).The code file is called P1.ipynb and the writeup template is writeup_template.md 
-
-To meet specifications in the project, take a look at the requirements in the [project rubric](https://review.udacity.com/#!/rubrics/322/view)
+The goals / steps of this project were the following:
+* Make a pipeline that finds lane lines on the road
+* Reflect on my work in a written report
 
 
-Creating a Great Writeup
----
-For this project, a great writeup should provide a detailed response to the "Reflection" section of the [project rubric](https://review.udacity.com/#!/rubrics/322/view). There are three parts to the reflection:
+[//]: # (Image References)
 
-1. Describe the pipeline
-
-2. Identify any shortcomings
-
-3. Suggest possible improvements
-
-We encourage using images in your writeup to demonstrate how your pipeline works.  
-
-All that said, please be concise!  We're not looking for you to write a book here: just a brief description.
-
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup. Here is a link to a [writeup template file](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md). 
-
-
-The Project
+[image1]: ./examples/grayscale.jpg "Grayscale"
+[grayscale]: ./writeup_images/grayscale.png
+[blur1]: ./writeup_images/blur1.png
+[cannyedge]: ./writeup_images/cannyedge.png
+[blur2]: ./writeup_images/blur2.png
+[roi]: ./writeup_images/roi.png
+[houghv1]: ./writeup_images/hough_v1.png
+[weightedv1]: ./writeup_images/weighted_v1.png
+[houghv2]: ./writeup_images/houghlines.png
+[weighted]: ./writeup_images/weighted.png
 ---
 
-## If you have already installed the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) you should be good to go!   If not, you should install the starter kit to get started on this project. ##
+### Reflection
 
-**Step 1:** Set up the [CarND Term1 Starter Kit](https://classroom.udacity.com/nanodegrees/nd013/parts/fbf77062-5703-404e-b60c-95b78b2f3f9e/modules/83ec35ee-1e02-48a5-bdb7-d244bd47c2dc/lessons/8c82408b-a217-4d09-b81d-1bda4c6380ef/concepts/4f1870e0-3849-43e4-b670-12e6f2d4b7a7) if you haven't already.
+### 1. Pipeline Description
 
-**Step 2:** Open the code in a Jupyter Notebook
+My pipeline consisted of 7 steps.
 
-You will complete the project code in a Jupyter notebook.  If you are unfamiliar with Jupyter Notebooks, check out <A HREF="https://www.packtpub.com/books/content/basics-jupyter-notebook-and-python" target="_blank">Cyrille Rossant's Basics of Jupyter Notebook and Python</A> to get started.
+1. The first step was to convert the image to grayscale (Reducing the number of channels from 3 to 1 ) in order to reduce the amount of computations.
 
-Jupyter is an Ipython notebook where you can run blocks of code and see results interactively.  All the code for this project is contained in a Jupyter notebook. To start Jupyter in your browser, use terminal to navigate to your project directory and then run the following command at the terminal prompt (be sure you've activated your Python 3 carnd-term1 environment as described in the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) installation instructions!):
+![alt text][grayscale]
 
-`> jupyter notebook`
+2. The second step was to apply Gaussian blur with kernel size of 5 in order to reduce the noise in the image
 
-A browser window will appear showing the contents of the current directory.  Click on the file called "P1.ipynb".  Another browser window will appear displaying the notebook.  Follow the instructions in the notebook to complete the project.  
+![alt text][blur1]
 
-**Step 3:** Complete the project and submit both the Ipython notebook and the project writeup
+3. The third step was applying Canny edge detection to detect edges based on the high and low thresholds which I had set to 65 and 195 respectively maintaining the suggested 1:3 ratio
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+![alt text][cannyedge]
 
+4. The fourth step was to apply an additional level of gaussian blur for reducing the noise so that the lines are more defined after edge detection
+
+![alt text][blur2]
+
+5. The next step was defining the Region of interest. Here assuming that the front facing camera that took the image is mounted in a fixed position on the car we can define a region where the lane lines are most likely to appear. This was done by using a polygon where the height  was set to approximately 60% of the image and the widths starting from 80% of the image at the bottom decreasing upto 10% at the top according to the observed lane lines.
+
+![alt text][roi]
+
+6. The sixth step would be to apply Hough transform to find lines from the masked region of interest. The values provided to the hough transform were distance rho=1 ,angular resolution theta=pi/180 ,threshold of 60 , minimum line length of 100 and maximum line gap of 50 to detect the lines properly. The lines are then plotted using given draw lines function.
+
+![alt text][houghv1] 
+
+7. The seventh step would be to superimpose the output of the hough lines function with the original image to produce the weighted sum and thereby draw the detected lane lines on the image
+
+![alt text][weightedv1] 
+
+
+In order to draw a single line on the left and right lanes, I have created a new  draw_lines_with_extrapolation() function with the following steps
+* Calculate the slope m and intercept b for all lines.
+* If slope is greater than zero then consider it as a right lane line ,otherwise consider it as left lane line.
+* Calculate the average slope and intercept for both the right and left lane separately.
+* Using the average slope and intercept calculated , the x,y co-ordinates of the line starting point and ending point on each lane is calculated and consolidated lane lines are drawn in the right and left lane.
+
+For drawing the lane lines on the challenge video the  condition for classifying the lines was further modified to put lines with m > 0.5 to right lane and  m < -0.5 to the left lane so that unnecessary lines were not added while averaging.
+
+![alt text][houghv2] 
+
+
+![alt text][weighted]
+
+
+
+### 2. Identify potential shortcomings with your current pipeline
+
+
+1. One potential shortcoming would be that when the  lane lines are curved as seen in the challenge video , the line drawn by the above approach would not follow the curved path.
+
+2. Another shortcoming is that edges are not detected when moving between areas with varying light intensities and hence the lines are not properly drawn in those regions where it is not able to differentiate between bright areas and light coloured lane lines.
+
+
+
+### 3. Suggest possible improvements to your pipeline
+
+1. A possible improvement would be to to maintain a running average of  values whenever an edge is not detected in a particular lane so as to draw a line and maintain lane line continuity
+
+2. Another potential improvement could be to draw curved lane lines to adapt to the curvature of the roads/lanes.
+
+3. The intersection of lane lines due to the curvature of roads can be avoided by separating the masked region to left and right segments and then processing them separately
