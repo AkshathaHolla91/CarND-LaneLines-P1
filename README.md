@@ -12,16 +12,15 @@ The goals / steps of this project were the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/grayscale.jpg "Grayscale"
-[grayscale]: ./writeup_images/grayscale.png
-[blur1]: ./writeup_images/blur1.png
-[cannyedge]: ./writeup_images/cannyedge.png
-[blur2]: ./writeup_images/blur2.png
-[roi]: ./writeup_images/roi.png
-[houghv1]: ./writeup_images/hough_v1.png
-[weightedv1]: ./writeup_images/weighted_v1.png
-[houghv2]: ./writeup_images/houghlines.png
-[weighted]: ./writeup_images/weighted.png
+[grayscale]: ./writeup_images/grayscale.png "Grayscale"
+[blur1]: ./writeup_images/blur1.png "Blur 1"
+[cannyedge]: ./writeup_images/cannyedge.png "Canny Edge"
+[blur2]: ./writeup_images/blur2.png "Blur 2"
+[roi]: ./writeup_images/roi.png "ROI"
+[houghv1]: ./writeup_images/hough_v1.png "Hough Lines"
+[weightedv1]: ./writeup_images/weighted_v1.png "Weighted Sum"
+[houghv2]: ./writeup_images/houghlines.png "Hough Lines Extrapolated"
+[weighted]: ./writeup_images/weighted.png "Weighted after Extrapolation"
 ---
 
 ### Reflection
