@@ -46,11 +46,11 @@ My pipeline consisted of 7 steps.
 
 ![alt text][blur1]
 
-3. The third step was applying Canny edge detection to detect edges based on the high and low thresholds which I had set to 65 and 195 respectively maintaining the suggested 1:3 ratio
+3. The third step was applying Canny edge detection to detect edges based on the high and low thresholds which I had set to 65 and 195 respectively maintaining the suggested 1:3 ratio. This enusered that only the necessary edges were detected.
 
 ![alt text][cannyedge]
 
-4. The fourth step was to apply an additional level of gaussian blur for reducing the noise so that the lines are more defined after edge detection
+4. The fourth step was to apply an additional level of gaussian blur so that the lines are more defined after edge detection
 
 ![alt text][blur2]
 
