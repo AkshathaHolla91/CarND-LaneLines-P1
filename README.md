@@ -11,7 +11,6 @@ The goals / steps of this project were the following:
 
 
 [//]: # (Image References)
-
 [grayscale]: ./writeup_images/grayscale.png "Grayscale"
 [blur1]: ./writeup_images/blur1.png "Blur 1"
 [cannyedge]: ./writeup_images/cannyedge.png "Canny Edge"
