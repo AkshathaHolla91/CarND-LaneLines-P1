@@ -1,9 +1,11 @@
 # **Finding Lane Lines on the Road** 
 
+## **Submission Files:**
+* [Jupyter Notebook](https://github.com/AkshathaHolla91/CarND-LaneLines-P1/blob/master/P1.ipynb)
+---
+
 ## Writeup
 ---
-# **Submission Files:**
-* [Jupyter Notebook](https://github.com/AkshathaHolla91/CarND-LaneLines-P1/blob/master/P1.ipynb)
 
 **Finding Lane Lines on the Road**
 
